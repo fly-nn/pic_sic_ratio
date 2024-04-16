@@ -3,18 +3,20 @@ project:
   output-dir: docs
 
 website:
-  title: "pic_sic_ratio"
+  title: "NJA Crew Information"
   navbar:
     left:
       - href: index.qmd
         text: Home
       - about.qmd
+      - duty_summary.qmd
 
 format:
   html:
     theme: cosmo
     css: styles.css
-    toc: true
+    toc: false
+    page-layout: full
 
 
 
