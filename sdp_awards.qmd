@@ -1,0 +1,187 @@
+---
+title: "SDP Awards"
+---
+
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(tidyverse)
+library(readxl)
+library(ggplot2)
+library("scales")
+library(lubridate)
+library(glue)
+library(gt)
+library(bslib)
+
+import_folder_2024 <- dir(path = "~/OneDrive - NJASAP/Documents/Seniority Related/Seniority List - Union/2024", 
+                          full.names = T,
+                          pattern = "\\d\\d\\d[34]-\\d\\d\\sSeniorityList_UnionCopy.xlsx"
+)
+
+########################################
+## Function to Import Seniority Lists ##
+########################################
+
+
+read_excel_files <- function(file) {
+  if(is.na(file)) stop("no file path")
+  imported_files <- read_excel(file,
+                               sheet = "UNION_EXCEL_FILE",
+                               range = cell_cols("A:P"))
+  imported_files
+}
+
+
+################################
+## MAP & Bind Seniority Lists ##
+################################
+
+tSeniorityMerge <- map_dfr(.x = import_folder_2024, .f = read_excel_files)
+
+tSeniorityMerge <- tSeniorityMerge %>% 
+  rename_all(tolower)
+
+tSeniorityMerge <- tSeniorityMerge %>% 
+  mutate( doh = ymd(doh), equip_lock = ymd(`equip lock`), published = ymd(published))
+
+### New SDP Feb 2024 ###
+
+tSeniorityMerge %>% 
+  select(cmi,name, aircraft, sdp, published) %>% 
+  pivot_wider(names_from = published, values_from = sdp) %>% 
+  mutate(new_sdp = ifelse( is.na(`2024-01-15`) & !is.na(`2024-02-15`), 1, 0)
+         )%>% 
+  filter(new_sdp == 1) %>% 
+  # group_by(aircraft) %>% 
+  select(name, aircraft, "2024-01-15", "2024-02-15") %>% 
+  gt(rowname_col = "name", groupname_col = "aircraft") %>% 
+  tab_header(title = md("February SDP Awards")) %>% 
+  tab_style(
+    style = cell_text(align = "left"),
+    locations = cells_title("title")
+  ) %>% 
+  tab_style(
+    style = cell_fill("lightgray"),
+    locations = cells_row_groups()
+  ) %>% 
+  cols_label(
+    "2024-01-15" = md("*2024-01*"),
+    "2024-02-15" = md("*2024-02*")
+  ) %>% 
+  cols_width(
+    starts_with("2024") ~px(100),
+    everything() ~px(225)
+  ) %>% 
+  cols_align(
+    align = "right",
+    columns = "name"
+  ) %>% 
+  cols_align(
+    align = "center",
+    columns = starts_with("2024")
+  ) %>% 
+  sub_missing(
+    columns = everything(),
+    rows = everything(),
+    missing_text = "--"
+  )
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+
+### New SDP March 2024 ###
+
+tSeniorityMerge %>% 
+  select(cmi,name, aircraft, sdp, published) %>% 
+  pivot_wider(names_from = published, values_from = sdp) %>% 
+  mutate(new_sdp = ifelse( is.na(`2024-02-15`) & !is.na(`2024-03-19`), 1, 0)
+  )%>% 
+  filter(new_sdp == 1) %>% 
+  select(name, aircraft, "2024-02-15", "2024-03-19") %>% 
+  gt(rowname_col = "name", groupname_col = "aircraft") %>% 
+  tab_header(title = md("March SDP Awards")) %>% 
+  tab_style(
+    style = cell_text(align = "left"),
+    locations = cells_title("title")
+  ) %>% 
+  tab_style(
+    style = cell_fill("lightgray"),
+    locations = cells_row_groups()
+  ) %>% 
+  cols_label(
+    "2024-02-15" = md("*2024-02*"),
+    "2024-03-19" = md("*2024-03*")
+  ) %>% 
+  cols_width(
+    starts_with("2024") ~px(100),
+    everything() ~px(225)
+  ) %>% 
+  cols_align(
+    align = "right",
+    columns = "name"
+  ) %>% 
+  cols_align(
+    align = "center",
+    columns = starts_with("2024")
+  ) %>% 
+  sub_missing(
+    columns = everything(),
+    rows = everything(),
+    missing_text = "--"
+  )
+
+```
+
+
+```{r}
+#| echo: false
+#| warning: false
+
+### New SDP April 2024 ###
+
+tSeniorityMerge %>% 
+  select(cmi,name, aircraft, sdp, published) %>% 
+  pivot_wider(names_from = published, values_from = sdp) %>% 
+  mutate(new_sdp = ifelse( is.na(`2024-03-19`) & !is.na(`2024-04-15`), 1, 0)
+  )%>% 
+  filter(new_sdp == 1) %>% 
+  select(name, aircraft, "2024-03-19", "2024-04-15") %>% 
+  gt(rowname_col = "name", groupname_col = "aircraft") %>% 
+  tab_header(title = md("April SDP Awards")) %>% 
+  tab_style(
+    style = cell_text(align = "left"),
+    locations = cells_title("title")
+  ) %>% 
+  tab_style(
+    style = cell_fill("lightgray"),
+    locations = cells_row_groups()
+  ) %>% 
+  cols_label(
+    "2024-03-19" = md("*2024-03*"),
+    "2024-04-15" = md("*2024-04*"),
+  ) %>% 
+  cols_width(
+    starts_with("2024") ~px(100),
+    everything() ~px(225)
+  ) %>% 
+  cols_align(
+    align = "right",
+    columns = "name"
+  ) %>% 
+  cols_align(
+    align = "center",
+    columns = starts_with("2024")
+  ) %>% 
+  sub_missing(
+    columns = everything(),
+    rows = everything(),
+    missing_text = "--"
+  )
+
+```

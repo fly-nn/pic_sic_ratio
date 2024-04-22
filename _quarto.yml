@@ -10,6 +10,7 @@ website:
         text: Home
       - about.qmd
       - duty_summary.qmd
+      - sdp_awards.qmd
 
 format:
   html:
