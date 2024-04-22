@@ -2,7 +2,7 @@
 title: "PIC SIC Ration"
 ---
 
-## March 2023 NJA PIC to SIC Ratio by Fleet
+## April 2024 NJA PIC to SIC Ratio by Fleet
 
 ```{r}
 #| echo: false
@@ -13,21 +13,21 @@ library(gt)
 library(lubridate)
 library(glue)
 
-tSnrty_List_imp <- read_excel("~/OneDrive - NJASAP/Documents/Seniority Related/Seniority List - Union/2024/2024-03 SeniorityList_UnionCopy.xlsx", 
+tSnrty_List_imp <- read_excel("~/OneDrive - NJASAP/Documents/Seniority Related/Seniority List - Union/2024/2024-04 SeniorityList_UnionCopy.xlsx", 
                                   sheet = "UNION_EXCEL_FILE",
                                   range = cell_cols("A:P")
 )
 
 file_name <- basename("~/OneDrive - NJASAP/Documents/
                               Seniority Related/Seniority List - Union/2024/
-                              2024-03 SeniorityList_UnionCopy.xlsx")
+                              2024-04 SeniorityList_UnionCopy.xlsx")
 
 list_year <- str_extract(file_name, "\\d+")
 list_month <- str_extract(file_name, ".*-(\\d{2})", group = 1)
 
 ### Seniority Clean-up ###
 
-t2024_03_Snrty <- tSnrty_List_imp %>% 
+tseniority <- tSnrty_List_imp %>% 
   rename_all(tolower) %>% 
   select(cmi, co_snrty = `company seniority`, snrty = `union seniority`, 4:7,
          equip_lock = `equip lock`, 9:12, tsp_elect = `tsp election`,
@@ -36,7 +36,7 @@ t2024_03_Snrty <- tSnrty_List_imp %>%
          yos_r = ceiling( as.duration(doh %--% published) / dyears(1) )
   )
 
-# glimpse(t2024_03_Snrty)
+# glimpse(tseniority)
 
 ### ESPN Theme ###
 
@@ -67,7 +67,7 @@ gt_theme_espn <- function(data, ...){
 
 ### Fleet Ratios ###
 
-tfleet_ratio <- t2024_03_Snrty %>% 
+tfleet_ratio <- tseniority %>% 
   select(aircraft, seat) %>% 
   filter(! aircraft %in% c("G-V", "BE-400A", "CE-560", "HS-125-800XPC")) %>% 
   group_by(aircraft, seat) %>% 
