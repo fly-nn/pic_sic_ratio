@@ -11,6 +11,8 @@ website:
       - about.qmd
       - duty_summary.qmd
       - sdp_awards.qmd
+      - sched_calendar.qmd
+      - 2024_line_7.qmd
 
 format:
   html:
@@ -18,6 +20,3 @@ format:
     css: styles.css
     toc: false
     page-layout: full
-
-
-

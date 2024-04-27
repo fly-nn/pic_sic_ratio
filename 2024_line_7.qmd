@@ -1,0 +1,6 @@
+---
+title: "2024 7&7 Line 7"
+# format: html
+---
+
+![2024 Line 7](2024-7.png)
